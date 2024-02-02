@@ -39,5 +39,6 @@ variable "volumes" {
   description = "Volumes to mount"
   default = {
     brew-workspace = "/home/coder"
+    linuxbrew = "/home/linuxbrew/.linuxbrew"
   }
 }
