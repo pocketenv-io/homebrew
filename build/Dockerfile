@@ -14,7 +14,8 @@ RUN rm -f packages.microsoft.gpg
 RUN  apt-get install -y apt-transport-https \
   && apt-get update \
   && apt-get install -y \
-  code sudo
+  --no-install-recommends \
+  code sudo ca-certificates iptables openssl pigz xz-utils
 
 ARG USER=coder
 ARG USER_ID=30033
@@ -27,6 +28,11 @@ RUN addgroup --gid $GROUP_ID ${USER} \
   && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >/etc/sudoers.d/${USER} \
   && chmod 0440 /etc/sudoers.d/${USER}
 RUN mkdir -p /home/${USER} && chown -R ${USER}:${USER} /home/${USER}
+
+ENV DOCKER_TLS_CERTDIR=/certs
+RUN mkdir /certs /certs/client && chmod 1777 /certs /certs/client
+COPY --from=docker:27-dind /usr/local/bin/ /usr/local/bin/
+VOLUME /var/lib/docker
 
 USER ${USER}
 
@@ -54,4 +60,8 @@ RUN if [ -n "$PACKAGES" ]; then \
   brew install ${PACKAGES}; exit 0;\
   fi
 
-ENTRYPOINT [ "code", "-v", "tunnel" ]
+COPY entry.sh /usr/local/bin/entry.sh
+
+RUN sudo chmod a+x /usr/local/bin/entry.sh
+
+ENTRYPOINT [ "entry.sh" ]
