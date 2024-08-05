@@ -13,7 +13,8 @@ pocketenv init -t homebrew
 ## ✨ Features
 
 - Homebrew
-- Ohmyposh
+- Oh-my-posh
 - Atuin
 - Direnv
 - Git
+- Docker
