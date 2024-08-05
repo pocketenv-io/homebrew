@@ -40,5 +40,6 @@ variable "volumes" {
   default = {
     brew-workspace = "/home/coder"
     linuxbrew = "/home/linuxbrew/.linuxbrew"
+    brew-docker-volumes = "/var/lib/docker"
   }
 }
